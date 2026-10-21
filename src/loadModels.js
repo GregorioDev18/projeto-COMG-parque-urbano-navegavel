@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 // Carrega os três modelos 3D do parque.
-export function loadModels(scene) {
+export function loadModels(scene, onModelLoaded) {
     const loader = new GLTFLoader();
 
     function configurarModelo(modelo) {
@@ -43,6 +43,7 @@ export function loadModels(scene) {
             scene.add(bench2);
 
             console.log('Bancos carregados!');
+            if (onModelLoaded) onModelLoaded();
         },
         undefined,
         (error) => console.error('Erro ao carregar banco:', error)
@@ -94,6 +95,7 @@ export function loadModels(scene) {
 
 
             console.log('Árvores carregadas!');
+            if (onModelLoaded) onModelLoaded();
         },
         undefined,
         (error) => console.error('Erro ao carregar árvore:', error)
@@ -115,6 +117,7 @@ export function loadModels(scene) {
             scene.add(fountain);
 
             console.log('Chafariz carregado!');
+            if (onModelLoaded) onModelLoaded();
         },
         undefined,
         (error) => console.error('Erro ao carregar chafariz:', error)

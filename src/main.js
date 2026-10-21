@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
+import { DiagnosticsManager } from './diagnostics.js';
 
 // ==========================================
 // 1. SETUP BASE: CENA, CÂMERA E RENDERIZADOR
@@ -30,6 +31,9 @@ document.body.style.margin = '0';
 document.body.style.overflow = 'hidden';
 
 document.body.appendChild(renderer.domElement);
+
+// Inicializa o Gerenciador de Modo Diagnóstico (lil-gui e métricas)
+const diagnostics = new DiagnosticsManager(scene, camera, renderer);
 
 // ==========================================
 // 2. TERRENO DO PARQUE
@@ -224,7 +228,8 @@ function animate() {
         }
     }
 
-    renderer.render(scene, camera);
+    // Renderiza através do gerenciador de diagnóstico (gerencia viewport dividida e métricas)
+    diagnostics.render();
 }
 
 // ==========================================
@@ -232,17 +237,7 @@ function animate() {
 // ==========================================
 
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-
-    renderer.setPixelRatio(
-        Math.min(window.devicePixelRatio, 2)
-    );
+    diagnostics.onResize();
 });
 
 // ==========================================
@@ -259,9 +254,13 @@ export {
     scene,
     camera,
     renderer,
-    controls
+    controls,
+    diagnostics
 };
 
 import { loadModels } from './loadModels.js';
 
-loadModels(scene);
+// Carrega os modelos e sincroniza as configurações de diagnóstico
+loadModels(scene, () => {
+    diagnostics.applyStateToScene();
+});
