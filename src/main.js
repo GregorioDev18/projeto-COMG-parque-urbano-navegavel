@@ -5,6 +5,7 @@ import { criarAmbiente } from './ambiente.js';
 import { criarIluminacao } from './iluminacao.js';
 import { configurarAnisotropia } from './materiais.js';
 import { loadModels } from './loadModels.js';
+import { criarTour } from './tour.js';
 
 // ==========================================
 // 1. SETUP BASE: CENA, CÂMERA E RENDERIZADOR
@@ -49,7 +50,11 @@ diagnostics.adicionarCasoProfundidade(ambiente.materialCaminho);
 iluminacao.criarGUI(diagnostics.gui);
 criarGUIMateriais(diagnostics.gui);
 
-loadModels(scene, ambiente, iluminacao.adicionarLuzPoste, () => diagnostics.applyStateToScene());
+window.modelosCarregados = 0; // o gravador do vídeo espera os 5 modelos (ver tour.js)
+loadModels(scene, ambiente, iluminacao.adicionarLuzPoste, () => {
+    diagnostics.applyStateToScene();
+    window.modelosCarregados++;
+});
 
 // ==========================================
 // 3. NAVEGAÇÃO EM PRIMEIRA PESSOA
@@ -171,6 +176,11 @@ if (q.get('painel') === '0') diagnostics.gui.hide();
 // 8. INICIALIZAÇÃO
 // ==========================================
 
-requestAnimationFrame(animate);
+if (q.get('tour') === '1') {
+    // Tour do vídeo: quem desenha os quadros é o gravador, chamando window.tour.irPara(t)
+    window.tour = criarTour({ camera, iluminacao, diagnostics, ambiente, gui: diagnostics.gui });
+} else {
+    requestAnimationFrame(animate);
+}
 
 export { scene, camera, renderer, controls, diagnostics };

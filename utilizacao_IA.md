@@ -16,6 +16,7 @@ no repositório. Na prática, a IA:
 - implementou as luzes, os presets (dia, entardecer, noite), os materiais PBR, a água com normal map procedural,
   o caso de z-fighting no painel de diagnóstico e a troca do `THREE.Clock` pelo `THREE.Timer`;
 - removeu a pasta `node_modules` do repositório (não deve ser versionada) e criou o `.gitignore`;
+- escreveu o tour automático (`src/tour.js`) e o gravador (`ferramentas/gravar_video.py`) e gerou o vídeo;
 - escreveu este README e esta nota.
 
 ## O que foi validado ou alterado manualmente
@@ -25,6 +26,8 @@ no repositório. Na prática, a IA:
 - Duas escolhas da IA foram trocadas depois de ver a cena: a textura de granito do chafariz ficou escura demais e
   foi substituída por arenito; a grama ficou marrom e recebeu uma cor verde multiplicando a textura.
 - O preset da noite foi clareado depois de ver que a cena ficava escura demais para o vídeo.
+- No tour, o enquadramento do poste foi refeito duas vezes (contra o sol, depois atrás de uma árvore), e o trecho
+  de profundidade passou a mostrar near 0,1 m e near 2 m porque com near 0,1 m a imagem ficava quase preta.
 - **A COMPLETAR pela equipe:** o que cada integrante revisou, testou ou mudou à mão (todos precisam conseguir
   explicar qualquer trecho na arguição).
 

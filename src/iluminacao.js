@@ -89,6 +89,19 @@ export function criarIluminacao(scene, renderer, sky) {
         guiCtrls.forEach((c) => c.updateDisplay());
     }
 
+    /** Mistura dois presets (k = 0: a, k = 1: b): números por interpolação linear, cores pelo lerp do RGB (usado no tour). */
+    function misturar(a, b, k) {
+        const A = PRESETS[a], B = PRESETS[b];
+        const cor = (x, y) => new THREE.Color(x).lerp(new THREE.Color(y), k).getHex();
+        for (const chave of Object.keys(A)) {
+            params[chave] = typeof A[chave] === 'number' && !['corSol', 'ceu', 'chao', 'neblina'].includes(chave)
+                ? A[chave] + (B[chave] - A[chave]) * k
+                : cor(A[chave], B[chave]);
+        }
+        params.preset = k < 0.5 ? a : b;
+        aplicar();
+    }
+
     /** Cria a PointLight de um poste; pos é a posição da lâmpada no mundo. */
     function adicionarLuzPoste(pos) {
         const luz = new THREE.PointLight(0xffb46b, params.postes, 14, 2);
@@ -126,5 +139,5 @@ export function criarIluminacao(scene, renderer, sky) {
     });
 
     aplicar();
-    return { sol, hemi, postes, adicionarLuzPoste, criarGUI, aplicar, usarPreset };
+    return { sol, hemi, postes, adicionarLuzPoste, criarGUI, aplicar, usarPreset, misturar };
 }

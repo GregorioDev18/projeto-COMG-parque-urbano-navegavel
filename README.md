@@ -6,6 +6,15 @@ se percorre a pé, em primeira pessoa, de dia, ao entardecer e à noite.
 
 ![Parque de dia, com o painel de diagnóstico](docs/img/dia.jpg)
 
+## Vídeo de apresentação
+
+[**docs/video.mp4**](docs/video.mp4) (80 s): navegação, texturas, os três formatos de modelo, dia → entardecer →
+noite e o modo diagnóstico (wireframe, profundidade, viewport dividida e o caso de z-fighting).
+
+O vídeo é gerado pelo próprio projeto: `?tour=1` liga um tour automático (`src/tour.js`) e
+`ferramentas/gravar_video.py` grava quadro a quadro pelo Chromium sem janela e junta tudo com o ffmpeg. Cada quadro
+é montado para um instante exato, então a velocidade do vídeo não depende do computador que grava.
+
 ## Como executar
 
 ```bash
@@ -46,7 +55,9 @@ Abra o endereço que o Vite mostrar (normalmente http://localhost:5173) e **cliq
 | `src/materiais.js` | carregamento das texturas PBR e o normal map procedural da água |
 | `src/loadModels.js` | modelos 3D em GLB, OBJ + MTL e FBX |
 | `src/diagnostics.js` | modo diagnóstico do pipeline (os 5 itens do requisito 3.3 e o caso de profundidade) |
+| `src/tour.js` | tour automático com legendas, usado para gravar o vídeo (`?tour=1`) |
 | `ferramentas/gltf_para_obj.py` | conversão da lixeira de glTF para OBJ + MTL (ver Créditos) |
+| `ferramentas/gravar_video.py` | grava o vídeo a partir do tour (Chromium sem janela + ffmpeg) |
 
 ## Decisões técnicas
 
