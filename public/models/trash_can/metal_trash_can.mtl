@@ -1,0 +1,5 @@
+# Material da lixeira: cor e normal map (rugosidade/metalicidade vêm do mapa ARM no código)
+newmtl metal_trash_can
+Kd 1.000 1.000 1.000
+map_Kd textures/metal_trash_can_diff_1k.jpg
+norm textures/metal_trash_can_nor_gl_1k.jpg

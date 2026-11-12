@@ -28,7 +28,7 @@ export class DiagnosticsManager {
 
         this.secondCameraHelper = new THREE.CameraHelper(this.secondCamera);
         this.secondCameraHelper.name = 'secondCameraHelper';
-        this.secondCameraHelper.visible = true;
+        this.secondCameraHelper.visible = false; // começa desligado: a cena abre limpa; tecla [4] mostra
         this.scene.add(this.secondCameraHelper);
 
         // Helper da câmera principal (para visualização a partir da visão superior / dividida)
@@ -54,7 +54,7 @@ export class DiagnosticsManager {
             backfaceCulling: true,
 
             // 4. Frustum e Câmeras
-            frustumHelper: true,
+            frustumHelper: false,
             viewMode: 'Primeira Pessoa', // 'Primeira Pessoa' | 'Viewport Dividida' | 'Visão de Cima'
             cameraNear: this.mainCamera.near,
             cameraFar: 60, // Ajuste padrão otimizado para o parque de 50x50m
@@ -132,6 +132,26 @@ export class DiagnosticsManager {
 
         // 4. Frustum Helper da Câmera Secundária
         this.secondCameraHelper.visible = this.params.frustumHelper;
+    }
+
+    /**
+     * Caso de diagnóstico de profundidade (README): o caminho está no mesmo plano da grama. Com o
+     * polygonOffset ligado, a profundidade do caminho é deslocada para perto da câmera no teste do z-buffer
+     * e ele sempre vence; desligado, os dois empatam e aparece o z-fighting (listras que piscam).
+     */
+    adicionarCasoProfundidade(materialCaminho) {
+        this.materialCaminho = materialCaminho;
+        this.params.correcaoZFighting = materialCaminho.polygonOffset;
+        this.zFightingCtrl = this.fPipeline.add(this.params, 'correcaoZFighting')
+            .name('Corrigir z-fighting do caminho [Z]')
+            .onChange((v) => this.setCorrecaoZFighting(v));
+    }
+
+    setCorrecaoZFighting(enabled) {
+        this.params.correcaoZFighting = enabled;
+        this.materialCaminho.polygonOffset = enabled;
+        this.materialCaminho.needsUpdate = true;
+        if (this.zFightingCtrl) this.zFightingCtrl.updateDisplay();
     }
 
     /**
@@ -234,6 +254,7 @@ export class DiagnosticsManager {
         // PASTA 1: PIPELINE DE RENDERIZAÇÃO
         // ==========================================
         const fPipeline = this.gui.addFolder('1. Pipeline Gráfico');
+        this.fPipeline = fPipeline;
 
         this.wireframeCtrl = fPipeline.add(this.params, 'wireframe')
             .name('1. Wireframe [1]')
@@ -353,6 +374,9 @@ export class DiagnosticsManager {
                     this.setViewMode(modes[nextIndex]);
                     break;
                 }
+                case 'KeyZ':
+                    if (this.materialCaminho) this.setCorrecaoZFighting(!this.params.correcaoZFighting);
+                    break;
                 case 'KeyH':
                     this.gui.show(this.gui._hidden);
                     break;
@@ -381,9 +405,12 @@ export class DiagnosticsManager {
         hud.style.boxShadow = '0 2px 10px rgba(0,0,0,0.5)';
 
         hud.innerHTML = `
-            <div><strong>[ESC]</strong> Liberar cursor para lil-gui | <strong>Clique</strong> para navegar (WASD + Mouse)</div>
+            <div><strong>[ESC]</strong> Liberar cursor para lil-gui | <strong>Clique</strong> para navegar (WASD + Mouse, Q/E gira, Shift corre)</div>
             <div style="color: #ffd700; margin-top: 2px;">
-                [1] Wireframe &nbsp;|&nbsp; [2] Z-Buffer &nbsp;|&nbsp; [3] Back-Face &nbsp;|&nbsp; [4] Frustum &nbsp;|&nbsp; [5] Culling &nbsp;|&nbsp; [V] Dividir Tela &nbsp;|&nbsp; [H] Painel
+                [1] Wireframe &nbsp;|&nbsp; [2] Z-Buffer &nbsp;|&nbsp; [3] Back-Face &nbsp;|&nbsp; [4] Frustum &nbsp;|&nbsp; [5] Culling &nbsp;|&nbsp; [Z] Z-fighting &nbsp;|&nbsp; [V] Dividir Tela
+            </div>
+            <div style="color: #9fd3ff; margin-top: 2px;">
+                [L] Dia / Entardecer / Noite &nbsp;|&nbsp; [N] Normal maps &nbsp;|&nbsp; [H] Painel
             </div>
         `;
 
