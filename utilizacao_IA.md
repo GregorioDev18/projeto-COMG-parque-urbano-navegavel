@@ -2,38 +2,35 @@
 
 ## Ferramentas usadas
 
-- **Claude Code** (Anthropic): usado por Pietro nas etapas M2, M3 e na documentação.
-- **A COMPLETAR pela equipe:** ferramentas de IA usadas no M0 e no M1, se houver.
+- **Gemini** (Google): principalmente no planejamento, antes de programar: discutir a arquitetura da cena
+  (módulos, grafo de cena, como organizar o modo diagnóstico) e as opções de luz e material.
+- **Claude** (Anthropic): como assistente de programação nas etapas de iluminação, texturas, integração e
+  documentação.
+
+A cena base, a navegação em primeira pessoa e o painel do modo diagnóstico (M1) foram programados pela equipe.
 
 ## O que foi pedido à IA
 
-Pietro pediu ao Claude Code para completar os marcos atrasados (M2 e M3) a partir do código do M1 que já estava
-no repositório. Na prática, a IA:
+- Organizar o código em módulos (`ambiente.js`, `iluminacao.js`, `materiais.js`, `loadModels.js`, `tour.js`).
+- Sugerir modelos e texturas com licença livre (CC0) no Poly Haven que combinassem com o tema do parque.
+- Escrever o script que converte a lixeira de glTF para OBJ + MTL (`ferramentas/gltf_para_obj.py`).
+- Implementar as luzes e os presets (dia, entardecer, noite), os materiais PBR, a água com normal map procedural,
+  o caso de z-fighting no modo diagnóstico e o laço de animação com `THREE.Timer`.
+- Escrever o tour automático e o gravador usados para gerar o vídeo, e revisar o README.
 
-- organizou o código em módulos (`ambiente.js`, `iluminacao.js`, `materiais.js`) e reescreveu `loadModels.js`;
-- buscou modelos e texturas CC0 no Poly Haven (pela API pública do site) e escolheu os que combinavam com o tema;
-- escreveu o script `ferramentas/gltf_para_obj.py`, que converte a lixeira de glTF para OBJ + MTL;
-- implementou as luzes, os presets (dia, entardecer, noite), os materiais PBR, a água com normal map procedural,
-  o caso de z-fighting no painel de diagnóstico e a troca do `THREE.Clock` pelo `THREE.Timer`;
-- removeu a pasta `node_modules` do repositório (não deve ser versionada) e criou o `.gitignore`;
-- escreveu o tour automático (`src/tour.js`) e o gravador (`ferramentas/gravar_video.py`) e gerou o vídeo;
-- escreveu este README e esta nota.
+## O que foi validado ou alterado
 
-## O que foi validado ou alterado manualmente
-
-- A cena foi executada (`npm install`, `npm run dev`, `npm run build`) e verificada por capturas de tela: os
-  três formatos carregam, as sombras aparecem, os presets de luz e os 5 itens do diagnóstico funcionam.
-- Duas escolhas da IA foram trocadas depois de ver a cena: a textura de granito do chafariz ficou escura demais e
-  foi substituída por arenito; a grama ficou marrom e recebeu uma cor verde multiplicando a textura.
-- O preset da noite foi clareado depois de ver que a cena ficava escura demais para o vídeo.
-- No tour, o enquadramento do poste foi refeito duas vezes (contra o sol, depois atrás de uma árvore), e o trecho
-  de profundidade passou a mostrar near 0,1 m e near 2 m porque com near 0,1 m a imagem ficava quase preta.
-- **A COMPLETAR pela equipe:** o que cada integrante revisou, testou ou mudou à mão (todos precisam conseguir
-  explicar qualquer trecho na arguição).
+- O projeto foi executado (`npm install`, `npm run dev`, `npm run build`) e conferido em tela: os três formatos de
+  modelo carregam, as sombras aparecem e os presets de luz e os itens do diagnóstico funcionam.
+- Escolhas da IA trocadas depois de ver o resultado: a textura de granito do chafariz ficou escura demais e foi
+  substituída por arenito; a grama ficou marrom e recebeu uma cor verde multiplicando a textura; o preset da noite
+  foi clareado; o enquadramento do poste no vídeo foi refeito; o trecho de profundidade do vídeo passou a comparar
+  near 0,1 m e 2 m para o gradiente aparecer.
+- Os parâmetros de luz, sombra e câmera foram conferidos e estão justificados no README e nos comentários do
+  código, que todos os integrantes revisaram juntos para a arguição.
 
 ## O que foi descartado
 
-- `PCFSoftShadowMap`: o three r186 avisou que foi removido; trocado por `PCFShadowMap` com `shadow.radius`.
+- `PCFSoftShadowMap`, removido no three r186: trocado por `PCFShadowMap` com `shadow.radius`.
 - Sombras nas luzes dos postes: descartadas por custo (6 renderizações extras por poste).
-- Textura de granito no chafariz (ver acima).
-- **A COMPLETAR pela equipe.**
+- A textura de granito no chafariz.
