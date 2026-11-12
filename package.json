@@ -1,16 +1,16 @@
 {
-  "name": "projetocomputacaografica",
+  "name": "parque-urbano-navegavel",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Parque urbano navegável em Three.js (Computação Gráfica, IFSP São João da Boa Vista)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "lil-gui": "^0.21.0",
     "three": "^0.186.1"
