@@ -175,8 +175,6 @@ está no fim de `src/main.js`).
 | Recurso | Autor / fonte | Licença |
 |---|---|---|
 | Banco (`bench.glb`) | plaggy — [Sketchfab](https://sketchfab.com/3d-models/cc0-bench-096d4f915819409f9739326118bd5aa7) | CC BY 4.0 |
-| Chafariz (`fountain.glb`) | **a confirmar** | **a confirmar** |
-| Árvore (`tree.glb`) | **a confirmar** | **a confirmar** |
 | Poste de rua (`street_lamp_01`, FBX) | [Poly Haven](https://polyhaven.com/a/street_lamp_01) | CC0 |
 | Lixeira de metal (`metal_trash_can`) | [Poly Haven](https://polyhaven.com/a/metal_trash_can); convertida de glTF para OBJ + MTL por `ferramentas/gltf_para_obj.py` | CC0 |
 | Textura de grama (`leafy_grass`) | [Poly Haven](https://polyhaven.com/a/leafy_grass) | CC0 |
